@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "smartix-provider"
+version = "0.1.0"
+description = ""
+authors = ["Rostislav Aleev <rs.aleev@gmail.com>"]
+readme = "README.md"
+packages = [{include = "smartix_provider"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+requests = "^2.31.0"
+
+
+[tool.poetry.group.dev.dependencies]
+apache-airflow = "^2.6.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
