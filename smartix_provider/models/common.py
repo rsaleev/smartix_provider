@@ -1,28 +1,23 @@
-import typing
 from datetime import datetime
 from enum import Enum
 
-from .base import SmartixModel
+from .base import BaseModel
 
 
-def ts_to_dt(arg: int):
-    return datetime.fromtimestamp(arg)
+class StateEnum(str, Enum):
+    ACTIVE = "ACTIVE"
+    HIDDEN = "BLOCKED"
 
 
-class StateEnum(Enum):
-    ACTIVE = "active"
-    HIDDEN = "blocked"
-
-
-class VPNModeEnum(Enum):
+class VPNModeEnum(str, Enum):
     ON = "ON"
     OFF = "OFF"
 
 
-class PointTypeEnum(Enum):
+class PointTypeEnum(str, Enum):
     POSTAMAT = "POSTAMAT"
 
 
-class RequestParams(SmartixModel):
+class RequestParams(BaseModel):
     page: int = 0
     size: int = 50
