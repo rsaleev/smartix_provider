@@ -1,17 +1,16 @@
 import typing
-from typing_extensions import Literal
-
 from datetime import datetime
 
-from .common import PointTypeEnum, SmartixModel, StateEnum
+from typing_extensions import Literal
+
+from .base import SmartixModel
+from .common import PointTypeEnum, StateEnum
 
 
 class PostamatDetailed(SmartixModel):
     id: str
     date_create: datetime
-    state: typing.Union[
-        Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]
-    ]
+    state: typing.Union[Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]]
     use_for_delivery: bool
     use_for_returning: bool
     use_for_c2C: bool
@@ -31,9 +30,7 @@ class Postamat(SmartixModel):
     name: str
     title: str
     date_update: datetime
-    state: typing.Union[
-        Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]
-    ]
+    state: typing.Union[Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]]
     date_create: datetime
     api_key: str
     static_key: str
@@ -60,29 +57,29 @@ class Postamat(SmartixModel):
 
 
 class Courier(SmartixModel):
-    id:int 
-    organization_id:int
-    person_id:int
-    person_name:str
-    postamat_permission_profile_id:int
-    postamat_permission_profile_name:str
-    group_name:str
+    id: int
+    organization_id: int
+    person_id: int
+    person_name: str
+    postamat_permission_profile_id: int
+    postamat_permission_profile_name: str
+    group_name: str
 
 
 class ModelProfile(SmartixModel):
-    id:int
-    name:str
-    active:bool
-    organization_id:int
-    organization_name:str
-    controller_type_id:int
-    controller_type_name:str
-    max_lines_count:int
-    controller_count:int
-    locker_count:int
-    cell_count:int
-    cell_temp_count:int
-    max_weight:int
-    cell_max_size:str
-    cell_min_size:str
-    disabled:bool
+    id: int
+    name: str
+    active: bool
+    organization_id: int
+    organization_name: str
+    controller_type_id: int
+    controller_type_name: str
+    max_lines_count: int
+    controller_count: int
+    locker_count: int
+    cell_count: int
+    cell_temp_count: int
+    max_weight: int
+    cell_max_size: str
+    cell_min_size: str
+    disabled: bool
