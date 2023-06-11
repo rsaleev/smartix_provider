@@ -75,17 +75,17 @@ class SmartixHook(BaseHook):
             request_params = RequestParams()
             params = request_params.dict(by_alias=True)
             params.update(kwargs)
-            r = session.get(endpoint, params=params)
+            r = session.get(f"{self.base_url}/{endpoint}", params=params)
             r.raise_for_status()
             total_items = self.__get_total_items(r)
             total_pages = total_items // request_params.size - 1
-            payload.append(r.json()["data"])
+            payload.extend(r.json()["data"])
             for i in range(1, total_pages):
                 request_params.page = i
                 params = request_params.dict(by_alias=True)
                 params.update(kwargs)
-                r = session.get(endpoint, params=params)
-                payload.append(r.json()["data"])
+                r = session.get(f"{self.base_url}/{endpoint}", params=params)
+                payload.extend(r.json()["data"])
             return payload
 
     def __fetch_one(self, endpoint: str, **kwargs) -> typing.Dict[str, typing.Any]:
@@ -93,43 +93,43 @@ class SmartixHook(BaseHook):
             request_params = RequestParams()
             params = request_params.dict(by_alias=True)
             params.update(kwargs)
-            r = session.get(endpoint, params=params)
+            r = session.get(f"{self.base_url}/{endpoint}", params=params)
             r.raise_for_status()
             return r.json()
 
     def get_problemcells(self, **kwargs) -> typing.List[ProblemCell]:
-        endpoint = f"{self.base_url}/report/postamat-cell/problem"
+        endpoint = f"report/postamat-cell/problem"
         data = self.retry_obj(self.__fetch_all, endpoint=endpoint, **kwargs)
         items = data["items"]  # type: ignore
         return [ProblemCell.parse_obj(item) for item in items]
 
     def get_monitoring(self, **kwargs) -> typing.List[Object]:
-        endpoint = f"{self.base_url}/monitoring"
+        endpoint = f"monitoring"
         data = self.retry_obj(self.__fetch_all, endpoint=endpoint, **kwargs)
         return [Object.parse_obj(item) for item in data]
 
     def get_postamats(self, **kwargs) -> typing.List[Postamat]:
-        endpoint = f"{self.base_url}/postamat"
+        endpoint = f"postamat"
         data = self.retry_obj(self.__fetch_all, endpoint=endpoint, **kwargs)
         return [Postamat.parse_obj(item) for item in data]
 
     def get_organizations(self, **kwargs) -> typing.List[Organization]:
-        endpoint = f"{self.base_url}/organization"
+        endpoint = f"organization"
         data = self.retry_obj(self.__fetch_all, url=endpoint, **kwargs)
         return [Organization.parse_obj(item) for item in data]
 
     def get_locations(self, **kwargs) -> typing.List[Location]:
-        endpoint = f"{self.base_url}/location"
+        endpoint = f"location"
         data = self.retry_obj(self.__fetch_all, endpoint, **kwargs)
         return [Location.parse_obj(item) for item in data]
 
     def get_location_detail(self, id: int, **kwargs) -> Location:
-        endpoint = f"{self.base_url}/location/{id}"
+        endpoint = f"location/{id}"
         data = self.retry_obj(self.__fetch_one, endpoint, **kwargs)
         return Location.parse_obj(data)
 
     def get_couriers(self, **kwargs) -> typing.List[Courier]:
-        endpoint = f"{self.base_url}/courier"
+        endpoint = f"courier"
         data = self.retry_obj(self.__fetch_all, endpoint, **kwargs)
         return [Courier.parse_obj(item) for item in data]
 
@@ -140,7 +140,7 @@ class SmartixHook(BaseHook):
         """
         Расчитывает баланс операций при захардкоженых id организаций. см код метода.
         """
-        endpoint = f"{self.base_url}/post-operation-calc-report"
+        endpoint = f"post-operation-calc-report"
         d = self.retry_obj(self.__fetch_all, endpoint, **kwargs)
         if not d:
             return 0
@@ -154,22 +154,22 @@ class SmartixHook(BaseHook):
         return sum / 100
 
     def get_operation_count(self, **kwargs):
-        endpoint = f"{self.base_url}/post-operation-calc-report"
-        d = self.retry_obj(self.__fetch_all, endpoint, **kwargs)
-        if not d:
+        endpoint = f"post-operation-calc-report"
+        data = self.retry_obj(self.__fetch_all, endpoint, **kwargs)
+        if not data:
             return 0
         operations = set()
-        for o in d:
+        for o in data:
             operations.add(o["postOperationId"])
         return len(operations)
 
     def get_modelprofile_detail(self, model_profile_id: int, **kwargs) -> ModelProfile:
-        endpoint = f"{self.base_url}/model-profile/{model_profile_id}"
+        endpoint = f"model-profile/{model_profile_id}"
         data = self.retry_obj(self.__fetch_one, endpoint, **kwargs)
         return ModelProfile.parse_obj(data)
 
     def get_operation(self, **kwargs) -> list:
-        endpoint = f"{self.base_url}/post-operation"
+        endpoint = f"post-operation"
         data = self.retry_obj(self.__fetch_one, endpoint, **kwargs)
         return [PostOperation.parse_obj(item) for item in data]
 
