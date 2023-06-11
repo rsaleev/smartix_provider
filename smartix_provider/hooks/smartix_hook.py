@@ -32,7 +32,7 @@ class SmartixHook(BaseHook):
                 )
             ),
         )
-        self.base_url: str
+        self.base_url: str = ""
 
     def get_conn(self) -> Session:
         session = Session()
