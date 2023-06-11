@@ -1,4 +1,6 @@
 import typing
+from typing_extensions import Literal
+
 from datetime import datetime
 
 from .base import SmartixModel
@@ -9,7 +11,7 @@ class Organization(SmartixModel):
     id: int
     name: str
     state: typing.Union[
-        typing.Literal[StateEnum.ACTIVE], typing.Literal[StateEnum.HIDDEN]
+        Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]
     ]
     date_create:datetime
     type:str
@@ -26,6 +28,6 @@ class Location(SmartixModel):
     work_time_profile_name:str
     organization_name:str
     state: typing.Union[
-        typing.Literal[StateEnum.ACTIVE], typing.Literal[StateEnum.HIDDEN]
+        Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]
     ]
     group_name:str

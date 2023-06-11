@@ -1,4 +1,6 @@
 import typing
+from typing_extensions import Literal
+
 from datetime import datetime
 
 from .common import PointTypeEnum, SmartixModel, StateEnum
@@ -8,7 +10,7 @@ class PostamatDetailed(SmartixModel):
     id: str
     date_create: datetime
     state: typing.Union[
-        typing.Literal[StateEnum.ACTIVE], typing.Literal[StateEnum.HIDDEN]
+        Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]
     ]
     use_for_delivery: bool
     use_for_returning: bool
@@ -30,7 +32,7 @@ class Postamat(SmartixModel):
     title: str
     date_update: datetime
     state: typing.Union[
-        typing.Literal[StateEnum.ACTIVE], typing.Literal[StateEnum.HIDDEN]
+        Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]
     ]
     date_create: datetime
     api_key: str
@@ -50,7 +52,7 @@ class Postamat(SmartixModel):
     language_profile_name: str
     application_id: int
     application_name: str
-    point_type: typing.Literal[PointTypeEnum.POSTAMAT]
+    point_type: Literal[PointTypeEnum.POSTAMAT]
     point_view_id: int
     point_view_name: str
     postamat: PostamatDetailed

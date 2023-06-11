@@ -1,4 +1,5 @@
 import typing
+from typing_extensions import Literal
 from datetime import datetime
 
 from .base import SmartixModel
@@ -18,14 +19,14 @@ class Object(SmartixModel):
     name: str
     title: str
     state: typing.Union[
-        typing.Literal[StateEnum.ACTIVE], typing.Literal[StateEnum.HIDDEN]
+        Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]
     ]
     last_connection: datetime
     last_payload: datetime
     update_app_active: bool
     update_res_active: bool
     vpn_mode: typing.Union[
-        typing.Literal[VPNModeEnum.ON], typing.Literal[VPNModeEnum.OFF]
+        Literal[VPNModeEnum.ON], Literal[VPNModeEnum.OFF]
     ]
     demon_version: str
     demon_date_build: datetime
@@ -45,4 +46,4 @@ class Object(SmartixModel):
     offline_packet_error_count: int
     controller_states: typing.List[ControllerState]
     has_point_box: bool
-    point_type: typing.Literal[PointTypeEnum.POSTAMAT]
+    point_type: Literal[PointTypeEnum.POSTAMAT]
