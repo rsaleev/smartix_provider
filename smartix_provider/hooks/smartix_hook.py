@@ -70,32 +70,35 @@ class SmartixHook(BaseHook):
         endpoint: str,
         **kwargs,
     ) -> typing.List[typing.Dict[str, typing.Any]]:
-        with disconnecting(self.get_conn()) as session:
-            payload = []
-            request_params = RequestParams()
+        session = self.get_conn()
+        payload = []
+        request_params = RequestParams()
+        params = request_params.dict(by_alias=True)
+        params.update(kwargs)
+        r = session.get(f"{self.base_url}/{endpoint}", params=params)
+        r.raise_for_status()
+        total_items = self.__get_total_items(r)
+        total_pages = total_items // request_params.size - 1
+        payload.extend(r.json()["data"])
+        for i in range(1, total_pages):
+            request_params.page = i
             params = request_params.dict(by_alias=True)
             params.update(kwargs)
             r = session.get(f"{self.base_url}/{endpoint}", params=params)
-            r.raise_for_status()
-            total_items = self.__get_total_items(r)
-            total_pages = total_items // request_params.size - 1
             payload.extend(r.json()["data"])
-            for i in range(1, total_pages):
-                request_params.page = i
-                params = request_params.dict(by_alias=True)
-                params.update(kwargs)
-                r = session.get(f"{self.base_url}/{endpoint}", params=params)
-                payload.extend(r.json()["data"])
-            return payload
+        session.close()
+        return payload
 
     def __fetch_one(self, endpoint: str, **kwargs) -> typing.Dict[str, typing.Any]:
-        with disconnecting(self.get_conn()) as session:
-            request_params = RequestParams()
-            params = request_params.dict(by_alias=True)
-            params.update(kwargs)
-            r = session.get(f"{self.base_url}/{endpoint}", params=params)
-            r.raise_for_status()
-            return r.json()
+        session = self.get_conn()
+        request_params = RequestParams()
+        params = request_params.dict(by_alias=True)
+        params.update(kwargs)
+        r = session.get(f"{self.base_url}/{endpoint}", params=params)
+        r.raise_for_status()
+        payload = r.json()["data"]
+        session.close()
+        return payload
 
     def get_problemcells(self, **kwargs) -> typing.List[ProblemCell]:
         endpoint = f"report/postamat-cell/problem"
@@ -175,11 +178,3 @@ class SmartixHook(BaseHook):
 
     def get_operation_detail(self, id: int, **kwargs):
         raise NotImplementedError
-
-
-@contextmanager
-def disconnecting(session: Session):
-    try:
-        yield session
-    finally:
-        session.close()
