@@ -76,10 +76,17 @@ class SmartixHook(BaseHook):
         params = request_params.dict(by_alias=True)
         params.update(kwargs)
         r = session.get(f"{self.base_url}/{endpoint}", params=params)
+        self.log.info(f"{r.request.method} {r.request.url} {r.status_code}")
         r.raise_for_status()
         total_items = self.__get_total_items(r)
+        self.log.info(f"TOTAL ITEMS {total_items}")
         total_pages = total_items // request_params.size - 1
-        payload.extend(r.json()["data"])
+        self.log.info(f"TOTAL PAGES {total_pages}")
+        data = r.json()["data"]
+        if isinstance(data, dict) and data.get("items"):
+            payload.extend(data["items"])
+            return payload
+        payload.extend(data)
         for i in range(1, total_pages):
             request_params.page = i
             params = request_params.dict(by_alias=True)
@@ -95,6 +102,7 @@ class SmartixHook(BaseHook):
         params = request_params.dict(by_alias=True)
         params.update(kwargs)
         r = session.get(f"{self.base_url}/{endpoint}", params=params)
+        self.log.info(f"{r.request.method} {r.request.url} {r.status_code}")
         r.raise_for_status()
         payload = r.json()["data"]
         session.close()
