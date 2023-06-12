@@ -85,14 +85,18 @@ class SmartixHook(BaseHook):
         data = r.json()["data"]
         if isinstance(data, dict) and data.get("items"):
             payload.extend(data["items"])
-            return payload
-        payload.extend(data)
+        else:
+            payload.extend(data)
         for i in range(1, total_pages):
             request_params.page = i
             params = request_params.dict(by_alias=True)
             params.update(kwargs)
             r = session.get(f"{self.base_url}/{endpoint}", params=params)
-            payload.extend(r.json()["data"])
+            page_data = r.json()["data"]
+            if isinstance(page_data, dict) and page_data.get("items"):
+                payload.extend(page_data["items"])
+            else:
+                payload.extend(page_data)
         session.close()
         return payload
 
