@@ -15,6 +15,17 @@ class ControllerState(SmartixModel):
     point_id: int
 
 
+class DeviceState(SmartixModel):
+    device_class: typing.Optional[int]
+    device_number: typing.Optional[int]
+    state: typing.Optional[int]
+    flags: typing.Optional[int]
+    point_id: typing.Optional[int]
+    error: bool
+    warning: bool
+    critical_warning: bool
+
+
 class Object(SmartixModel):
     id: int
     name: str
@@ -42,5 +53,6 @@ class Object(SmartixModel):
     gui_status: int
     offline_packet_error_count: int
     controller_states: typing.List[ControllerState]
+    device_states: typing.Optional[typing.List[DeviceState]]
     has_point_box: bool
     point_type: Literal[PointTypeEnum.POSTAMAT]
