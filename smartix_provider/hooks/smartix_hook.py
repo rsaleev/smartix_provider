@@ -111,8 +111,7 @@ class SmartixHook(BaseHook):
     def get_problemcells(self, **kwargs) -> typing.List[ProblemCell]:
         endpoint = f"report/postamat-cell/problem"
         data = self.retry_obj(self.__fetch_all, endpoint=endpoint, **kwargs)
-        items = data["items"]  # type: ignore
-        return [ProblemCell.parse_obj(item) for item in items]
+        return [ProblemCell.parse_obj(item) for item in data]
 
     def get_monitoring(self, **kwargs) -> typing.List[Object]:
         endpoint = f"monitoring"
