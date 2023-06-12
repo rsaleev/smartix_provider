@@ -17,7 +17,7 @@ class ControllerState(SmartixModel):
 class Object(SmartixModel):
     id: int
     name: str
-    title: str
+    title: typing.Optional[str]
     state: typing.Union[
         Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]
     ]
@@ -34,7 +34,7 @@ class Object(SmartixModel):
     gui_date_build: datetime
     id_organization: int
     organization: str
-    full_addres: str
+    full_address: str
     temporary_blocking: bool
     last_connection_time: int
     last_payload_time: int
