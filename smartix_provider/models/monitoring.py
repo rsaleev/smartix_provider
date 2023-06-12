@@ -1,6 +1,7 @@
 import typing
-from typing_extensions import Literal
 from datetime import datetime
+
+from typing_extensions import Literal
 
 from .base import SmartixModel
 from .common import PointTypeEnum, StateEnum, VPNModeEnum
@@ -18,16 +19,12 @@ class Object(SmartixModel):
     id: int
     name: str
     title: typing.Optional[str]
-    state: typing.Union[
-        Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]
-    ]
+    state: typing.Union[Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]]
     last_connection: datetime
-    last_payload: datetime
+    last_payload: typing.Optional[datetime]
     update_app_active: bool
     update_res_active: bool
-    vpn_mode: typing.Union[
-        Literal[VPNModeEnum.ON], Literal[VPNModeEnum.OFF]
-    ]
+    vpn_mode: typing.Union[Literal[VPNModeEnum.ON], Literal[VPNModeEnum.OFF]]
     demon_version: str
     demon_date_build: datetime
     gui_version: str
