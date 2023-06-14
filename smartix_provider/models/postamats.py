@@ -13,7 +13,7 @@ class PostamatDetailed(SmartixModel):
     state: typing.Union[Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]]
     use_for_delivery: bool
     use_for_returning: bool
-    use_for_c2C: bool
+    use_for_c2c: typing.Optional[bool]
     use_for_rent: bool
     use_for_paid_storage: bool
     use_for_free_loads: bool
@@ -28,16 +28,16 @@ class PostamatDetailed(SmartixModel):
 class Postamat(SmartixModel):
     id: int
     name: str
-    title: str
+    title: typing.Optional[str]
     date_update: datetime
     state: typing.Union[Literal[StateEnum.ACTIVE], Literal[StateEnum.HIDDEN]]
     date_create: datetime
     api_key: str
     static_key: str
     dynamic_key: bool
-    find: str
+    find: typing.Optional[str]
     lock_desktop_on_keyboard: bool
-    access_guide: str
+    access_guide: typing.Optional[str]
     for_test: bool
     publish: bool
     auto_update: bool
